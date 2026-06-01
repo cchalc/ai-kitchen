@@ -1,0 +1,12 @@
+{
+  "name": "ai-kitchen",
+  "description": "Personal Databricks Field Engineering skills and tools — incubator for work that may eventually be published to the vibe marketplace.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Christopher Chalcraft",
+    "email": "chris.chalcraft@gmail.com"
+  },
+  "skills": "./skills/",
+  "commands": "./commands/",
+  "agents": "./agents/"
+}

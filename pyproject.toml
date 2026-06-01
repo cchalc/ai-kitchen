@@ -1,0 +1,9 @@
+[project]
+name = "ai-kitchen"
+version = "0.1.0"
+description = "Personal Databricks FE skills and tools (incubator)"
+requires-python = ">=3.11"
+dependencies = []
+
+[tool.uv]
+package = false
