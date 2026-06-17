@@ -12,6 +12,14 @@ Append-only log of non-obvious things learned while working in this repo. Newest
 
 ---
 
+### 2026-07-19 — `wt` (worktrunk) + `jj` colocation for parallel agent work
+
+**What:** Ran a ponytail (github.com/DietrichGebert/ponytail) over-engineering review across a TanStack/Electric app and split the fixes into 3 parallel `wt` worktrees. Key mechanics: `wt` drives **git** worktrees, not jj. For a jj-first repo, `jj git init --colocate` the main copy, then `wt switch --create <branch>` per stream, commit with plain `git` **inside** each worktree (jj isn't present there), `wt merge -y` back to main, and finally `jj git import` in main to pull the commits into jj. Parallel branches merged with zero conflicts because each touched a disjoint set of files. Two gotchas: (1) an interactive `commit-msg` hook doing `exec < /dev/tty` fails non-interactively — use `git commit --no-verify` for agent commits; (2) worktrees have no `node_modules`, so don't `pnpm install` N times — symlink or verify statically.
+
+**Why it matters:** This is the repeatable recipe for fanning agent work out in parallel and folding it back into a jj history. Plan the split by **file boundaries, not features**, so merges stay conflict-free. Ponytail's scope is strictly over-engineering (dead code, single-caller wrappers, unused params, redundant memoization) — keep convention nits (e.g. `useState` bans) out of that pass so the review stays honest.
+
+**Tags:** #jj #worktrunk #wt #parallel-agents #ponytail #workflow
+
 ### 2026-05-28 — First-time devenv activation has three setup gotchas
 
 **What:** Activating `direnv allow` on a fresh host with `use devenv` in `.envrc` triggered three separate failures before the shell would load.
