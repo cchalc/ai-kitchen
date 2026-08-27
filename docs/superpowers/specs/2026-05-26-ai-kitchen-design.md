@@ -6,7 +6,7 @@
 
 ## Purpose
 
-`ai-kitchen` is a personal incubator for Databricks Field Engineering skills, slash commands, agents, and supporting tools. Skills are drafted in `scratch/`, promoted to `plugin/` when mature, and published to the official Vibe marketplace (`databricks/vibe`) via `/vibe-publish-plugin` when ready to share. The repo is single-author (cchalc / christopher-chalcraft_data) and private.
+`ai-kitchen` is a personal incubator for Databricks Field Engineering skills, slash commands, agents, and supporting tools. Skills are drafted in `scratch/`, promoted to `plugin/` when mature, and published to the official Vibe marketplace (`databricks/vibe`) via `/vibe-publish-plugin` when ready to share. The repo is single-author (`cchalc`).
 
 ## Goals
 

@@ -1,0 +1,12 @@
+# Per-project omnigent workstream config (generic — source of truth for the lean essentials).
+#
+# This overrides harness/model for THIS project only; the global ~/.omnigent/config.yaml is
+# untouched. Resolved via omnigent's _merge_effective_config: the `harness` key deep-merges one
+# level, `model` replaces. Verify with `omni config list` run from this directory.
+#
+# INTENTIONALLY GENERIC — no company specifics. No `server:`, no `providers:`/`auth:` profile,
+# no managed-app URL, no gateway. Any company-specific config (server, auth profile, gateway)
+# lives only in a separate private repo, layered on top of this shape.
+harness: claude-sdk
+# model: <pin a model here if you want this project on a specific one; omit to use the
+#         configured provider's default>
