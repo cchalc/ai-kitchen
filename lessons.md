@@ -29,10 +29,10 @@ Append-only log of non-obvious things learned while working in this repo. Newest
 **Why it matters:** Future setups on new machines will hit the same three. Document them in the README's quickstart so others (and future-me) skip the dance. Future devenv versions may bundle the direnvrc stdlib — re-check when bumping.
 **Tags:** #devenv #direnv #onboarding #nix
 
-### 2026-05-26 — `cchalc` SSH identity is distinct from `christopher-chalcraft_data` GitHub user
+### 2026-05-26 — Multiple GitHub identities: SSH vs gh CLI can mismatch
 
-**What:** SSH key on this host authenticates to GitHub as `cchalc`, but the repo owner is `christopher-chalcraft_data`. Cloning with SSH failed with "Repository not found" because `cchalc` isn't a collaborator on the private repo.
-**Why it matters:** Always check `ssh -T git@github.com` and `gh auth status` separately when cloning private repos. For this repo, use `gh repo clone` (HTTPS via gh token) or use the `christopher-chalcraft_data` account explicitly. Documented because the GitHub error message ("Repository not found") is generic for private + no-access, easy to misread as a typo.
+**What:** When your git SSH key and your `gh` CLI authenticate as different GitHub accounts, a clone/push can fail with a generic "Repository not found" — which reads like a typo but is actually an access mismatch.
+**Why it matters:** Check `ssh -T git@github.com` and `gh auth status` separately when a clone/push fails unexpectedly. Use `gh repo clone` (HTTPS via the gh token) to sidestep an SSH-identity mismatch, or configure SSH multi-identity.
 **Tags:** #github #auth #onboarding
 
 ### 2026-05-26 — Vibe CI rejects skills without explicit negative triggers

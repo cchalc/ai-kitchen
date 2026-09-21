@@ -8,7 +8,7 @@
 
 **Tech Stack:** jj (colocated with git), worktrunk (`wt`), direnv, devenv (Nix), uv, Python 3.11.
 
-**Working directory:** `/Users/christopher.chalcraft/Projects/Databricks/ai-kitchen`
+**Working directory:** `/Users/christopher.chalcraft/Projects/ai-kitchen`
 
 ---
 
@@ -20,7 +20,7 @@
 - [ ] **Step 1: Run jj colocate from inside the repo**
 
 ```bash
-cd /Users/christopher.chalcraft/Projects/Databricks/ai-kitchen
+cd /Users/christopher.chalcraft/Projects/ai-kitchen
 jj git init --colocate
 ```
 
@@ -481,12 +481,6 @@ Append-only log of non-obvious things learned while working in this repo. Newest
 
 ---
 
-### 2026-05-26 — `cchalc` SSH identity is distinct from `christopher-chalcraft_data` GitHub user
-
-**What:** SSH key on this host authenticates to GitHub as `cchalc`, but the repo owner is `christopher-chalcraft_data`. Cloning with SSH failed with "Repository not found" because `cchalc` isn't a collaborator on the private repo.
-**Why it matters:** Always check `ssh -T git@github.com` and `gh auth status` separately when cloning private repos. For this repo, use `gh repo clone` (HTTPS via gh token) or use the `christopher-chalcraft_data` account explicitly. Documented because the GitHub error message ("Repository not found") is generic for private + no-access, easy to misread as a typo.
-**Tags:** #github #auth #onboarding
-
 ### 2026-05-26 — Vibe CI rejects skills without explicit negative triggers
 
 **What:** `/vibe-publish-plugin` won't pass CI unless each skill `description` includes "NOT for X" exclusions for overlapping skills. Evals require ≥95% routing accuracy.
@@ -693,7 +687,7 @@ Expected: Browser opens to the repo on GitHub. Visually confirm `plugin/`, `scra
 
 After all tasks complete, verify the success criteria from the spec:
 
-- [ ] `cd /Users/christopher.chalcraft/Projects/Databricks/ai-kitchen` triggers direnv → devenv shell.
+- [ ] `cd /Users/christopher.chalcraft/Projects/ai-kitchen` triggers direnv → devenv shell.
 - [ ] `which python` returns a `/nix/store/...` path (Python 3.11).
 - [ ] `which uv` resolves (devenv-provided).
 - [ ] `uv tree` runs without error.
@@ -710,4 +704,4 @@ After all tasks complete, verify the success criteria from the spec:
 - This plan is sequential. Tasks 1–9 must run in order because each task assumes the prior task's state.
 - All `jj describe` / `jj new` boundaries are chosen to group logically-related file changes. If you'd rather collapse them into a single commit, run `jj squash` after Task 8.
 - If devenv's first build hangs or fails (Task 8 Step 1), check `~/.cache/nix/`. The fallback path (bare direnv + uv) is the next thing to try — temporarily comment out the `use devenv` branch in `.envrc` and re-run `direnv allow`.
-- If `jj git push` (Task 9 Step 3) fails with permission errors, the auth mismatch from `lessons.md` is biting — gh CLI is authenticated as `christopher-chalcraft_data` but jj uses git's SSH, which authenticates as `cchalc`. Either: (a) push via `gh` somehow, (b) add `cchalc` as a collaborator on the repo, or (c) configure SSH multi-identity. Repo is private and owned by `christopher-chalcraft_data`, so option (b) is simplest.
+- If `jj git push` (Task 9 Step 3) fails with permission errors, check that your git SSH identity (`ssh -T git@github.com`) matches the GitHub account with push access to the repo, and that `gh auth status` agrees. Mismatched identities surface as a generic "Repository not found".
