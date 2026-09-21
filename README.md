@@ -41,4 +41,6 @@ If you don't have devenv, the `.envrc` falls back to bare direnv + uv (you'll ne
 
 ## License
 
-Personal / internal. Not for redistribution.
+Open source under the [MIT License](./LICENSE). The vendored `plugin/skills/frontend-design`
+skill retains its own upstream license ([Apache-2.0](./plugin/skills/frontend-design/LICENSE.txt),
+from [anthropics/skills](https://github.com/anthropics/skills)).
