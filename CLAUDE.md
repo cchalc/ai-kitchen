@@ -1,14 +1,25 @@
 # ai-kitchen
 
-Personal incubator for Databricks Field Engineering skills and tools.
-Mature work graduates to the official vibe marketplace via
-`/vibe-publish-plugin`. Anything in `scratch/` is WIP and not for general use.
+Public mirror of shared open-source Claude Code skills. The canonical development
+happens in a private companion repo; files here are written by its mirror tool
+keyed on the frontmatter tag `metadata.visibility: public`. Skills tagged with
+this visibility are shared across both repos.
 
 ## Repo layout
-- `plugin/`   — publishable Vibe plugin (canonical layout)
-- `scratch/`  — drafts; not published; rename to `plugin/skills/<name>` when ready
+- `plugin/`   — Claude Code plugin (manifest + skills + commands + agents + hooks)
+- `.agents/`  — shared agent config mirrored from the companion repo
+- `scratch/`  — drafts; not mirrored back; rename to `plugin/skills/<name>` when ready
 - `tools/`    — Python helpers; share the root uv venv
 - `docs/`     — design specs (incl. `docs/superpowers/specs/`)
+
+## Mirror workflow
+
+Files here can be edited directly, and changes are pulled back into the companion
+repo by its `pull-public` tool. If both sides have been edited on the same file,
+the mirror tool refuses and asks for manual merge.
+
+Skills tagged `metadata.visibility: public` in their frontmatter are the ones
+that sync. Check existing skills for the pattern before adding a new one.
 
 ## Living docs (read these in order at session start)
 1. `checkpoint.md` — where I left off
@@ -22,10 +33,11 @@ On surprises: append a dated entry to `lessons.md`.
 ## Conventions
 - Skills live under `plugin/skills/<kebab-name>/SKILL.md`.
 - Skill `description` MUST include "when to use" + explicit negative
-  triggers (vibe CI requires ≥95% routing accuracy).
-- `skill-routing.yaml` evals: max 2 entries per skill (vibe CI hard limit).
+  triggers (Claude Code routing requires ≥95% accuracy).
+- `skill-routing.yaml` evals: max 2 entries per skill (routing CI hard limit).
 - Shell snippets must be Linux-compatible. Forbidden on Linux CI:
   `sed -i ''`, `base64 -i`, `stat -f`, `date -v`, `/Applications/...`.
+- All skills MUST have `metadata.visibility: public` in frontmatter to be mirrored.
 
 ## VCS
 - `jj` is the primary local VCS; colocated with git.
@@ -40,15 +52,6 @@ On surprises: append a dated entry to `lessons.md`.
 - Footnote: if you rename the repo dir, update the hardcoded path in
   `.envrc` and `devenv.nix` (`enterShell`).
 
-## Promotion workflow
-1. Draft in `scratch/<idea>/`.
-2. Validate skill: kebab-case `name`, "when to use" + negative triggers
-   in `description`, Linux-safe shell.
-3. `git mv scratch/<idea> plugin/skills/<idea>` (jj sees the rename).
-4. `cd plugin && /vibe-publish-plugin` — auto-detects, dupe-checks,
-   validates, opens PR to `databricks/vibe`.
-
 ## Safety
-- Never run `/vibe-publish-plugin` from `scratch/` — it's intentionally
-  outside the plugin and won't be detected.
 - Don't commit credentials. `.gitignore` covers `.env*`; double-check.
+- All public skills must pass validation: `claude plugin validate plugin/`.

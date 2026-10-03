@@ -1,0 +1,14 @@
+# Held-out paraphrases for tools/route_eval.py. Unlike skill-routing.yaml (which
+# vibe CI caps at 2 per skill), these phrasings deliberately don't appear in any
+# skill description, so they catch descriptions overfitted to the eval prompts.
+evals:
+  - {prompt: "I'm about to start on ticket #318 for the login timeout — help me set up a branch", expect: committing-work}
+  - {prompt: "my teammate's PR fixes the cache bug but has 9 messy WIP commits — what verdict should I leave?", expect: reviewing-prs}
+  - {prompt: "go through the open PR from Sam and leave feedback as a reviewer", expect: reviewing-prs}
+  - {prompt: "I've finished the feature, get it ready for others to review on GitHub", expect: pull-requests}
+  - {prompt: "users hit a crash when the config file is empty; I fixed it, now cover it with a test", expect: code-testing}
+  - {prompt: "we're cutting v2.0 and renamed a flag, document that for users", expect: changelog}
+  - {prompt: "our repo has no front page doc, write one", expect: writing-readmes}
+  - {prompt: "node_modules and .DS_Store keep showing up in git status", expect: gitignore}
+  - {prompt: "a client paid for this code — who owns it and what license goes on it?", expect: license-choice}
+  - {prompt: "make every PR run lint and tests before it can be merged", expect: setup-ci}

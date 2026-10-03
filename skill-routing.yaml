@@ -1,0 +1,77 @@
+# Routing evals for ai-kitchen skills.
+# Hard limit: max 2 entries per skill (vibe CI). Each entry maps a representative
+# user prompt to the skill it should route to. Includes cross-skill
+# disambiguation cases (the main routing risk between these sibling skills).
+
+evals:
+  # committing-work
+  - prompt: "draft a commit message for these staged changes"
+    expect: committing-work
+  - prompt: "what should I name the branch for issue #42?"
+    expect: committing-work
+
+  # reviewing-prs (vs pull-requests)
+  - prompt: "review this PR and leave comments on the diff"
+    expect: reviewing-prs
+  - prompt: "should I approve or request changes on their PR?"
+    expect: reviewing-prs
+
+  # pull-requests (vs reviewing-prs / committing-work)
+  - prompt: "open a pull request and write the description"
+    expect: pull-requests
+  - prompt: "how should I merge this PR — merge commit or squash?"
+    expect: pull-requests
+
+  # changelog
+  - prompt: "add a changelog entry for this release"
+    expect: changelog
+  - prompt: "write a migration note for this breaking change"
+    expect: changelog
+
+  # writing-readmes
+  - prompt: "write a README following the Standard Readme spec"
+    expect: writing-readmes
+  - prompt: "what are the required README sections?"
+    expect: writing-readmes
+
+  # gitignore
+  - prompt: "what should go in the .gitignore for this project?"
+    expect: gitignore
+  - prompt: "fix these overly broad gitignore patterns"
+    expect: gitignore
+
+  # license-choice (vs reuse-headers)
+  - prompt: "which license should we use for this new library?"
+    expect: license-choice
+  - prompt: "set up a proprietary repo and add the LICENSE file"
+    expect: license-choice
+
+  # reuse-headers (vs license-choice)
+  - prompt: "add SPDX license headers to these source files"
+    expect: reuse-headers
+  - prompt: "reuse lint is failing on a missing copyright header"
+    expect: reuse-headers
+
+  # code-testing (vs setup-ci)
+  - prompt: "write a regression test for this bug"
+    expect: code-testing
+  - prompt: "what kind of test should I write for this CLI?"
+    expect: code-testing
+
+  # setup-ci (vs code-testing)
+  - prompt: "set up a GitHub Actions workflow for this repo"
+    expect: setup-ci
+  - prompt: "require the CI status checks before merging to main"
+    expect: setup-ci
+
+  # frontend-design
+  - prompt: "design and build a distinctive React component with a bold aesthetic"
+    expect: frontend-design
+  - prompt: "create a production-grade web interface that stands out visually"
+    expect: frontend-design
+
+  # ponytail-fix
+  - prompt: "fix all the lint errors and make the checks pass"
+    expect: ponytail-fix
+  - prompt: "run the test suite and triage every failure by root cause"
+    expect: ponytail-fix
