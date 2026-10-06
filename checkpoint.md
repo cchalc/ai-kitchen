@@ -1,23 +1,23 @@
 # Checkpoint
 
-**Last session:** 2026-10-05 — converted 12 developer skills to a public mirror
-and scrubbed internal references. All skills tagged `metadata.visibility: public`.
+**Last session:** 2026-10-06. Split the shared skills into tier plugins and made
+the repo an installable marketplace.
 
-**Current state:** 
-- **12 shared skills in `plugin/skills/`:** `committing-work`, `reviewing-prs`,
-  `pull-requests`, `changelog`, `writing-readmes`, `gitignore`, `license-choice`,
-  `reuse-headers`, `code-testing`, `setup-ci`, `frontend-design`, `ponytail-fix`.
-- **All metadata updated:** `metadata.visibility: public` in all SKILL.md files;
-  `plugin.json` rewritten to describe public-facing skills; internal references
-  removed.
-- **route_eval.py generalized:** docstring updated, plugin name read from
-  `plugin.json` instead of hardcoded.
-- **Routing complete:** 16/16 evals (all 12 skills × 2 evals each) in
-  `skill-routing.yaml`; validated with `tools/route_eval.py`.
-- **Docs reframed:** CLAUDE.md, architecture.md, README.md, plugin/README.md
-  now describe this as a public mirror; removed vibe-publish-plugin workflow.
+**Current state:**
+- **Two tier plugins**, listed in `.claude-plugin/marketplace.json` (marketplace `ai-kitchen`):
+  - `plugins/core/`: committing-work, pull-requests, reviewing-prs, code-testing,
+    ponytail-fix. Installed here at **user scope** (`core@ai-kitchen`), so it's on everywhere.
+  - `plugins/bespoke/`: changelog, writing-readmes, setup-ci, license-choice,
+    reuse-headers, gitignore, frontend-design. Not enabled anywhere; enable per project.
+- Paths match the private companion repo exactly, and its two-way mirror keeps
+  them in sync. Every skill is tagged `metadata.visibility: public`.
+- `tools/route_eval.py` loads every marketplace plugin and expects `<plugin>:<skill>`.
+  Single runs are noisy: re-run failures before trusting a drop.
 
-**Next action:** Companion repo imports these via `pull-public`; vibe publishing
-happens there if needed. This repo is now stable as the public source of truth.
+**Next action:** Nothing here. The companion repo still has to merge its stacked
+PRs, then install its `ops` tier in the SSA dirs and publish to vibe.
+
+**Open issues:** `ponytail-fix` never routes in evals (the model runs the linter
+directly). "Get it ready for review" flips between pull-requests and committing-work.
 
 **Blockers:** None.
