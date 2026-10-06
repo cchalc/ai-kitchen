@@ -20,14 +20,18 @@ PLUGIN_NAME = json.loads((PLUGIN / ".claude-plugin" / "plugin.json").read_text()
 
 
 def run(case, repo):
-    p = subprocess.run(
-        ["claude", "-p", case["prompt"], "--plugin-dir", str(PLUGIN),
-         "--output-format", "stream-json", "--verbose", "--max-turns", "6",
-         "--disallowedTools", "Bash", "Write", "Edit", "NotebookEdit", "Agent"],
-        cwd=repo, capture_output=True, text=True, timeout=240,
-    )
+    try:
+        stdout = subprocess.run(
+            ["claude", "-p", case["prompt"], "--plugin-dir", str(PLUGIN),
+             "--output-format", "stream-json", "--verbose", "--max-turns", "6",
+             "--disallowedTools", "Bash", "Write", "Edit", "NotebookEdit", "Agent"],
+            cwd=repo, capture_output=True, text=True, timeout=240,
+        ).stdout
+    except subprocess.TimeoutExpired as e:
+        # Routing is decided in the first turns; score whatever was streamed.
+        stdout = e.stdout.decode() if isinstance(e.stdout, bytes) else (e.stdout or "")
     skills = []
-    for line in p.stdout.splitlines():
+    for line in stdout.splitlines():
         try:
             m = json.loads(line)
         except ValueError:
