@@ -1,0 +1,15 @@
+{
+  "name": "ai-kitchen",
+  "description": "Open-source Claude Code skills from ai-kitchen: developer-workflow discipline for commits, PRs, reviews, releases, licensing, testing, and CI.",
+  "owner": {
+    "name": "Christopher Chalcraft",
+    "email": "chris.chalcraft@gmail.com"
+  },
+  "plugins": [
+    {
+      "name": "ai-kitchen",
+      "source": "./plugin",
+      "description": "Open-source developer-workflow skills for Claude Code: commit discipline, PR review, changelogs, licensing, testing, and CI setup."
+    }
+  ]
+}
