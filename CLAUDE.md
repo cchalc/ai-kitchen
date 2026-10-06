@@ -6,9 +6,9 @@ keyed on the frontmatter tag `metadata.visibility: public`. Skills tagged with
 this visibility are shared across both repos.
 
 ## Repo layout
-- `plugin/`   — Claude Code plugin (manifest + skills + commands + agents + hooks)
+- `plugins/`  — tier plugins: `core/` (always-on) and `bespoke/` (occasional); listed in `.claude-plugin/marketplace.json`
 - `.agents/`  — shared agent config mirrored from the companion repo
-- `scratch/`  — drafts; not mirrored back; rename to `plugin/skills/<name>` when ready
+- `scratch/`  — drafts; not mirrored back; move to `plugins/<tier>/skills/<name>` when ready
 - `tools/`    — Python helpers; share the root uv venv
 - `docs/`     — design specs (incl. `docs/superpowers/specs/`)
 
@@ -31,7 +31,7 @@ At session end: overwrite `checkpoint.md` with current state.
 On surprises: append a dated entry to `lessons.md`.
 
 ## Conventions
-- Skills live under `plugin/skills/<kebab-name>/SKILL.md`.
+- Skills live under `plugins/<tier>/skills/<kebab-name>/SKILL.md` (same path as in the companion repo).
 - Skill `description` MUST include "when to use" + explicit negative
   triggers (Claude Code routing requires ≥95% accuracy).
 - `skill-routing.yaml` evals: max 2 entries per skill (routing CI hard limit).
@@ -54,4 +54,4 @@ On surprises: append a dated entry to `lessons.md`.
 
 ## Safety
 - Don't commit credentials. `.gitignore` covers `.env*`; double-check.
-- All public skills must pass validation: `claude plugin validate plugin/`.
+- All public skills must pass validation: `claude plugin validate .` plus each `plugins/<tier>`.

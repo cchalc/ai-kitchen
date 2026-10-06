@@ -26,13 +26,13 @@ If you don't have devenv, the `.envrc` falls back to bare direnv + uv (you'll ne
 
 | Path | What it holds |
 |---|---|
-| `plugin/` | Claude Code plugin manifest + 12 shared skills + commands + agents. |
-| `plugin/skills/<name>/SKILL.md` | Individual skill definitions, all tagged `metadata.visibility: public`. |
+| `plugins/` | Two tier plugins: `core/` (always-on developer workflow) and `bespoke/` (occasional, specialised). See `plugins/README.md`. |
+| `plugins/<tier>/skills/<name>/SKILL.md` | Individual skill definitions, all tagged `metadata.visibility: public`. |
 | `.agents/` | Shared agent config mirrored from the companion repo. |
 | `skill-routing.yaml` | Routing evals (max 2 per skill); run with `uv run python tools/route_eval.py`. |
 | `tools/` | Python helpers using the root uv venv. |
 | `docs/` | Design specs under `docs/superpowers/`. |
-| `scratch/` | Drafts. Not mirrored. Promote by `git mv` into `plugin/skills/`. |
+| `scratch/` | Drafts. Not mirrored. Promote by `git mv` into `plugins/<tier>/skills/`. |
 
 ## Mirror workflow
 
@@ -54,7 +54,7 @@ If you see a conflict, the instructions are in the companion repo's error messag
 
 ```bash
 # Validate the plugin and all skills
-claude plugin validate plugin/
+claude plugin validate .  # marketplace; then each plugins/<tier>
 
 # Test skill routing (run from repo root)
 uv run python tools/route_eval.py skill-routing.yaml
@@ -66,6 +66,6 @@ uv run python tools/route_eval.py skill-routing.yaml
 
 ## License
 
-Open source under the [MIT License](./LICENSE). The vendored `plugin/skills/frontend-design`
-skill retains its own upstream license ([Apache-2.0](./plugin/skills/frontend-design/LICENSE.txt),
+Open source under the [MIT License](./LICENSE). The vendored `plugins/bespoke/skills/frontend-design`
+skill retains its own upstream license ([Apache-2.0](./plugins/bespoke/skills/frontend-design/LICENSE.txt),
 from [anthropics/skills](https://github.com/anthropics/skills)).

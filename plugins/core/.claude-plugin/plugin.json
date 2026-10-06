@@ -1,0 +1,10 @@
+{
+  "name": "core",
+  "description": "Core developer-workflow skills used all the time: commit discipline, opening and reviewing PRs, testing, and fixing lint/test failures.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Christopher Chalcraft",
+    "email": "chris.chalcraft@gmail.com"
+  },
+  "skills": "./skills/"
+}
