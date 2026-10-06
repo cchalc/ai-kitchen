@@ -8,6 +8,8 @@ description: >
   pass", "fix the build", "clear the type errors", or "get CI green". Do NOT
   use to add features, refactor working code, reformat untouched files, or when
   the user only wants a list of problems (that's a review, not a fix).
+metadata:
+  visibility: public
 ---
 
 Fix everything the gate reports, smallest correct diff per error. Root cause

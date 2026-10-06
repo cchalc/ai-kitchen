@@ -1,11 +1,15 @@
 # ai-kitchen
 
-Personal incubator for Databricks Field Engineering skills and tools. Drafts live in `scratch/`; mature work moves to `plugin/`; finished pieces ship to the official Vibe marketplace via `/vibe-publish-plugin`.
+Open-source developer-workflow skills for Claude Code. This is a **public mirror** of shared skills — canonical development happens in a private companion repo, and files here are written by its mirror tool. Skills tagged `metadata.visibility: public` sync bidirectionally.
+
+## 12 Shared Skills
+
+All 12 skills focus on developer workflow: commit discipline, PR review, changelog hygiene, licensing, testing, and CI setup. Each includes explicit negative triggers and routing evals to ensure accurate Claude Code skill routing.
 
 ## Quickstart
 
 ```bash
-# 1. Clone (already done if you're reading this locally)
+# 1. Clone
 git clone git@github.com:cchalc/ai-kitchen.git
 
 # 2. Enter the directory and approve direnv
@@ -22,10 +26,21 @@ If you don't have devenv, the `.envrc` falls back to bare direnv + uv (you'll ne
 
 | Path | What it holds |
 |---|---|
-| `plugin/` | Publishable Vibe plugin (manifest + skills + commands + agents + hooks). |
-| `scratch/` | Drafts. Not published. Promote by `git mv` into `plugin/skills/`. |
+| `plugin/` | Claude Code plugin manifest + 12 shared skills + commands + agents. |
+| `plugin/skills/<name>/SKILL.md` | Individual skill definitions, all tagged `metadata.visibility: public`. |
+| `.agents/` | Shared agent config mirrored from the companion repo. |
+| `skill-routing.yaml` | Routing evals (max 2 per skill); run with `uv run python tools/route_eval.py`. |
 | `tools/` | Python helpers using the root uv venv. |
-| `docs/` | Formal design specs under `docs/superpowers/`. |
+| `docs/` | Design specs under `docs/superpowers/`. |
+| `scratch/` | Drafts. Not mirrored. Promote by `git mv` into `plugin/skills/`. |
+
+## Mirror workflow
+
+This repo is a one-way read + one-way write mirror:
+- **Read from here** → companion repo imports via `pull-public` (merges with `metadata.visibility: public`)
+- **Write here** → allowed; `pull-public` detects and rejects both-sides-edited conflicts
+
+If you see a conflict, the instructions are in the companion repo's error message.
 
 ## Living docs
 
@@ -34,6 +49,16 @@ If you don't have devenv, the `.envrc` falls back to bare direnv + uv (you'll ne
 - [`tasks.md`](./tasks.md) — rolling work list
 - [`lessons.md`](./lessons.md) — append-only learnings
 - [`checkpoint.md`](./checkpoint.md) — "where I left off"
+
+## Validation
+
+```bash
+# Validate the plugin and all skills
+claude plugin validate plugin/
+
+# Test skill routing (run from repo root)
+uv run python tools/route_eval.py skill-routing.yaml
+```
 
 ## VCS
 
