@@ -8,15 +8,15 @@ This repo is a **public mirror** of shared Claude Code skills. Canonical develop
 
 The mirror keeps the public and private development synchronized while allowing the private repo to hold additional closed-source work.
 
-## Top-level shape: plugin in a subdir
+## Top-level shape: tier plugins in `plugins/`
 
-The repo is a *hybrid* — a Claude Code plugin with shared skills AND Python tooling for skill development and routing validation. The plugin lives in `plugin/`; everything else lives next to it.
+The repo is a *hybrid*: Claude Code plugins with shared skills AND Python tooling for skill development and routing validation. The plugins live in `plugins/<tier>/`, listed by the root `.claude-plugin/marketplace.json`; everything else lives next to them.
 
-**Why not plugin at root?**  Mixes plugin metadata (`.claude-plugin/plugin.json`) with Python metadata (`pyproject.toml`, `devenv.nix`) and scratch work at the same level. Blurs "what gets published/mirrored" vs. "what doesn't."
+**Why tiers?** Skills are grouped by how often they're needed, because that's what enablement controls. `core` (committing-work, pull-requests, reviewing-prs, code-testing, ponytail-fix) is meant to be on everywhere at user scope. `bespoke` (changelog, writing-readmes, setup-ci, license-choice, reuse-headers, gitignore, frontend-design) is enabled per project when needed. An enabled skill costs only its description in context, but every enabled skill adds routing noise, so occasional skills stay off by default. (Started as a single `plugin/`; split on 2026-10-05.)
 
-**Why not multiple plugins?**  Premature. There's one plugin today. If a second arrives, restructure then.
+**Why the same paths as the companion repo?** The private companion repo uses the identical `plugins/<tier>/skills/<name>/` layout, so its mirror maps a skill path 1:1 with no translation, in both directions.
 
-**Trade-off accepted:** Plugin validation and skill routing testing must be run from `plugin/` or the repo root (one `cd`). Acceptable in exchange for the clean boundary.
+**Why not plugins at root?**  Mixes plugin metadata (`.claude-plugin/plugin.json`) with Python metadata (`pyproject.toml`, `devenv.nix`) and scratch work at the same level. Blurs "what gets published/mirrored" vs. "what doesn't."
 
 ## VCS: jj colocated with git
 

@@ -1,0 +1,10 @@
+{
+  "name": "bespoke",
+  "description": "Occasional, specialised developer skills: changelogs, READMEs, CI setup, licensing and SPDX headers, .gitignore, and frontend design.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Christopher Chalcraft",
+    "email": "chris.chalcraft@gmail.com"
+  },
+  "skills": "./skills/"
+}

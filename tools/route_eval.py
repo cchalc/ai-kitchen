@@ -4,6 +4,11 @@
 cache is unreachable. This runs each prompt through `claude -p` against the real
 environment and scores the first Skill call.
 
+Loads every plugin listed in the repo's .claude-plugin/marketplace.json, so each
+case is scored against its skill's own plugin prefix (<plugin>:<skill>) with all
+tiers competing. Run it before installing these plugins globally, or the installed
+copies compete with the ones loaded here.
+
 Usage: uv run python tools/route_eval.py skill-routing.yaml [more.yaml ...]
 """
 import json
@@ -15,14 +20,22 @@ from concurrent.futures import ThreadPoolExecutor
 
 import yaml
 
-PLUGIN = pathlib.Path(__file__).resolve().parent.parent / "plugin"
-PLUGIN_NAME = json.loads((PLUGIN / ".claude-plugin" / "plugin.json").read_text())["name"]
+ROOT = pathlib.Path(__file__).resolve().parent.parent
+MARKETPLACE = json.loads((ROOT / ".claude-plugin" / "marketplace.json").read_text())
+PLUGINS = [(ROOT / p["source"]).resolve() for p in MARKETPLACE["plugins"]]
+# skill name -> "<plugin>:<skill>", the prefix a correct route must carry
+EXPECTED = {
+    skill.name: f"{json.loads((plugin / '.claude-plugin' / 'plugin.json').read_text())['name']}:{skill.name}"
+    for plugin in PLUGINS
+    for skill in sorted((plugin / "skills").glob("*/"))
+}
 
 
 def run(case, repo):
     try:
         stdout = subprocess.run(
-            ["claude", "-p", case["prompt"], "--plugin-dir", str(PLUGIN),
+            ["claude", "-p", case["prompt"],
+             *[arg for plugin in PLUGINS for arg in ("--plugin-dir", str(plugin))],
              "--output-format", "stream-json", "--verbose", "--max-turns", "6",
              "--disallowedTools", "Bash", "Write", "Edit", "NotebookEdit", "Agent"],
             cwd=repo, capture_output=True, text=True, timeout=240,
@@ -41,7 +54,7 @@ def run(case, repo):
                        if c.get("type") == "tool_use" and c["name"] == "Skill"]
     got = skills[0] if skills else None
     # Require the plugin prefix: a bare name may be a same-named built-in skill.
-    return case, got, got == PLUGIN_NAME + ":" + case["expect"]
+    return case, got, got == EXPECTED.get(case["expect"])
 
 
 def main():
