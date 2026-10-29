@@ -6,7 +6,7 @@ you need them, and the root `.claude-plugin/marketplace.json` lists the plugins.
 | Plugin | Tier | Suggested scope |
 |---|---|---|
 | `core/` | Developer-workflow skills used all the time: committing-work, pull-requests, reviewing-prs, code-testing, ponytail-fix | user (everywhere) |
-| `bespoke/` | Occasional, specialised: changelog, writing-readmes, setup-ci, license-choice, reuse-headers, gitignore, frontend-design | project, where needed |
+| `bespoke/` | Occasional, specialised: changelog, writing-readmes, setup-ci, license-choice, reuse-headers, gitignore, frontend-design, project-startup | project, where needed |
 
 Install:
 

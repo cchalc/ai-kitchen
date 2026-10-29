@@ -1,0 +1,5 @@
+# Per-developer overrides sourced by the committed .envrc
+.envrc.local
+
+# Claude Code per-user settings (the shared .claude/settings.json IS committed)
+.claude/settings.local.json
