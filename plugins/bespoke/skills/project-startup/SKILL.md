@@ -112,18 +112,42 @@ Python is missing, run `uv python install <version>`. Verify:
 uv run python -c 'import sys; print(sys.executable)'   # must be under ~/.virtualenvs/<dir name>/
 ```
 
-## 5. CI and README — commit 3
+**The lockfile must be installable by CI and by anyone who clones the repo.** uv records whatever
+index it resolved from, and a developer's user-level uv config (a private PyPI mirror, for
+example) leaks into `uv.lock`:
+
+```bash
+grep -o 'https://[^/"]*' uv.lock | sort | uniq -c   # expect only pypi.org + files.pythonhosted.org
+```
+
+If anything else shows up, add the `lock` and `check-lock` targets from
+`references/lockfile.md`. Leave the index to each developer's own uv config: don't pin one in
+`pyproject.toml`, and don't export `UV_DEFAULT_INDEX`. Behind a proxy, set `UV_FROZEN=1` in
+`.envrc.local`, then run `make lock`. Verify the way CI will see it:
+`make check-lock && UV_NO_CONFIG=1 uv lock --check --offline`.
+
+## 5. CI, README and license — commit 3 (license as its own commit)
 
 - **CI** (setup-ci): `references/github/check.yml`, with the targets switched to the
   profile's `gate`, and action versions matched to the ones the template's workflows already
   pin. Keep any dependabot/freshness workflows the template shipped. If the
   template points at a CI component the repo can't reach (e.g. internal and the repo is
-  public), use this workflow instead and say so.
+  public), use this workflow instead and say so. `check.yml` has separate lint, test (with
+  coverage), whitespace and offline link-check jobs, per setup-ci.
 - **README** (writing-readmes): a Standard Readme with title, a description under 120
   characters, Install (`direnv allow && make install`), Usage, Contributing (→ CLAUDE.md and
   the standards skills) and License. Remove the template's own "how to start a project from
   this template" sections from README/AGENTS.md, as such templates ask. Run
   `git grep '\[//\]:'` and expect nothing back.
+- Set the repo host's description to the README one-liner
+  (`gh repo edit --description "…"`), as writing-readmes asks.
+- **License** (license-choice). Every public repo needs one, so ask which license. If a
+  template was scaffolded, read *its* license first. Template-derived files keep the
+  template's license, which you can't relicense. A typical layout:
+  - your license (e.g. MIT) as `LICENSE`
+  - the template's text in `LICENSES/LicenseRef-<Name>.txt`
+  - a `NOTICE` that lists the derived files
+  - an SPDX header plus a "modified" note in each derived file that can take comments
 - Add an `Added` entry to the `CHANGELOG.md` `Unreleased` section.
 
 ## 6. Gate and hand-off
@@ -143,5 +167,7 @@ uv run python -c 'import sys; print(sys.executable)'   # must be under ~/.virtua
   config to overwrites.
 - An in-tree `.venv`, or a shared venv across worktrees.
 - A public repo pointing at an org-only marketplace or CI component.
+- A `uv.lock` that pins a private mirror, so CI can't install.
+- A public repo with no license, or template code silently relicensed.
 - Template placeholders or "how to use this template" text left in the finished repo.
 - One giant unsigned commit.

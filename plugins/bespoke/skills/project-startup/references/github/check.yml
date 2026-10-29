@@ -4,6 +4,10 @@ on:
     branches: [main]
   pull_request:
 
+# Fail instead of silently re-locking when uv.lock is stale, so the committed lock is what's checked.
+env:
+  UV_LOCKED: "1"
+
 jobs:
   # The same gate the agent and developers run locally (see CLAUDE.md).
   lint:
@@ -11,12 +15,27 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.0.1
+      - run: uv lock --check   # committed uv.lock matches pyproject.toml
       - run: make install
-      - run: make lint
+      - run: make lint         # includes check-lock: public PyPI hosts only
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.0.1
       - run: make install
-      - run: make test
+      - run: make test   # includes the coverage report
+  whitespace:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # No trailing whitespace or missing final newline. LICENSES/ holds verbatim license texts.
+      - run: git diff --check "$(git hash-object -t tree /dev/null)" HEAD -- . ':!LICENSES'
+  links:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      # Offline: checks relative links between files, never the network, so it can't flake.
+      - uses: lycheeverse/lychee-action@v2
+        with:
+          args: --offline --no-progress './**/*.md'

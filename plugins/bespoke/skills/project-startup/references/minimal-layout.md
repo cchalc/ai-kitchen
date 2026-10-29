@@ -23,7 +23,7 @@ requires-python = ">=3.12"
 dependencies = []
 
 [dependency-groups]
-dev = ["pytest>=8", "pyright>=1.1.400", "ruff>=0.9"]
+dev = ["pytest>=8", "pytest-cov>=6", "pyright>=1.1.400", "ruff>=0.9"]
 
 [build-system]
 requires = ["hatchling"]
@@ -49,7 +49,7 @@ include = ["src", "tests"]
 pythonVersion = "3.12"
 ```
 
-`Makefile` (recipes are tab-indented):
+`Makefile` (recipes are tab-indented; also add the `lock`/`check-lock` block from `lockfile.md`):
 
 ```make
 .DEFAULT_GOAL := help
@@ -70,8 +70,8 @@ format:  ## Fix formatting and auto-fixable lint
 	uv run ruff format .
 	uv run ruff check --fix .
 
-test:  ## Run the tests (no credentials needed)
-	uv run pytest
+test:  ## Run the tests with coverage (no credentials needed)
+	uv run pytest --cov={{pkg}} --cov-report=term-missing
 ```
 
 `tests/test_smoke.py`:
