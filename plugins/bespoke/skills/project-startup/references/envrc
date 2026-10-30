@@ -1,0 +1,5 @@
+# Out-of-source uv venv, one per checkout dir, so worktrees never share a venv.
+export UV_PROJECT_ENVIRONMENT=$HOME/.virtualenvs/$(basename "$PWD")
+PATH_add "$UV_PROJECT_ENVIRONMENT/bin"
+# Per-developer secrets / overrides (gitignored).
+source_env_if_exists .envrc.local
